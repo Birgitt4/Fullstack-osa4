@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Mitä tänään syötäisiin",
-    "author": "MTV3",
-    "url": "www.mtv3.fi",
+    "title": "Puutarhakausi",
+    "author": "yle",
+    "url": "www.fi",
     "likes": 3
 }
