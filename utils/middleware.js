@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 
 const errorHandler = (error, request, response, next) => {
     if (error.name === 'ValidationError') {
@@ -25,12 +27,14 @@ const tokenExtractor = (request, response, next) => {
     next()
 }
 
-const userExtractor = (request, response, next) => {
+const userExtractor = async (request, response, next) => {
     //routejen pitäisi päästä käyttäjään kutsulla
     //const user = request.user
     if (request.token) {
         const decodedToken = jwt.verify(request.token, process.env.SECRET)
-        request.user = User.findById(decodedToken.id)
+        if (decodedToken) {
+            request.user = await User.findById(decodedToken.id)
+        }
     }
     next()
 }
