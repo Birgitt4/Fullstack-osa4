@@ -2,7 +2,6 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-const { tokenExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -21,19 +20,21 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  //blogin lisääminen onnistuu vain validilla tokenilla
   //const token = getTokenFrom(request)
   //const decodedToken = jwt.verify(token, process.env.SECRET)
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken) {
-    return response.status(401).json({error: 'token missing or invalid'})
-  }
-  const user = await User.findById(decodedToken.id)
+  //const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  //if (!decodedToken) {
+    //return response.status(401).json({error: 'token missing or invalid'})
+  //}
+  const user = request.user
 
   //liitetään uusi blogi vain tietokannan ekaan käyttäjään
   //const users = await User.find({})
   //const user = users[0]
   
+  //Blogin saa lisätä kuka tahansa kirjautunut käyttäjä
+  //error tokenissa tai userissa??
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -49,9 +50,23 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 //4.13
+//4.21 poisto onnistuu vain jos poiston tekijä, = kenen token, on sama kuin blogin lisääjä
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+  const id = request.params.id
+  //const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  //if (!decodedToken) {
+    //return response.status(401).json({error: 'token missing or invalid'})
+  //}
+  //tokenin käyttäjä
+  const user = request.user
+  //poistettava blogi
+  const blog = await Blog.findById(id)
+  if (blog.user.toString() === user.id.toString()) {
+    await Blog.findByIdAndRemove(id)
+    response.status(204).end()
+  } else {
+    return response.status(403).json({error: 'it looks like this ain\'t your blog'})
+  }
 })
 
 blogsRouter.put('/:id', async (request, response) => {

@@ -1,13 +1,12 @@
-const bcrypt = require('bcrypt')
-const usersRouter = require('../controllers/users')
-const User = require('../models/user')
-const helper = require('./test_helper')
-const mongoose = require('mongoose')
 const supertest = require('supertest')
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+
+const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 
-//... <- jtn
+const User = require('../models/user')
 
 describe('when there is initially a user', () => {
     beforeEach(async () => {
@@ -16,7 +15,7 @@ describe('when there is initially a user', () => {
         const passwordHash = await bcrypt.hash('salasana', 10)
         const user = new User({
             username: 'root',
-            passwordHash
+            passwordHash: passwordHash
         })
 
         await user.save()
@@ -76,14 +75,14 @@ describe('when there is initially a user', () => {
         })
         test('too short username causes an error with message', async () => {
             const usersAtStart = await helper.usersInDb()
-            const newUser = { username: 'xd', password: 'salasana' }
-
+            const newUser = { username: 'xd', name: 'hupiukko', password: 'salasana' }
+            
             const result = await api
                 .post('/api/users')
                 .send(newUser)
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
-        
+            
             expect(result.body.error).toContain('Username must be atleast 3')
 
             const usersAtEnd = await helper.usersInDb()

@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9wMTIzIiwiaWQiOiI2MjA1Mzc3ZGYyMTQ5N2Q1Y2I1ZDAwZGQiLCJpYXQiOjE2NDQ4Mjc3Mzl9.-nuSJElZruW2Rd4okO9iK99Q0veoKv9Gpy08M28ju8c
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9wMTIzIiwiaWQiOiI2MjA1Mzc3ZGYyMTQ5N2Q1Y2I1ZDAwZGQiLCJpYXQiOjE2NDQ4MzQ1Nzh9.VeCUdd46RU1GEQ6TLRmYqkZF1HcIPubpMij5xNJBx1E
 
 {
-    "title": "blog43",
+    "title": "blog3",
     "author": "Dani",
     "url": "www.fi",
     "likes": 3

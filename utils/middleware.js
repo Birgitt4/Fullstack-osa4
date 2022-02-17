@@ -8,6 +8,7 @@ const errorHandler = (error, request, response, next) => {
             error: 'invalid token'
         })
     }
+    
     next(error)
 }
 
@@ -18,13 +19,19 @@ const tokenExtractor = (request, response, next) => {
     if (authorization && authorization.toLowerCase().startsWith('bearer')) {
         const token = authorization.substring(7)
         request.token = token
-        next()
+    } else {
+        request.token = null
     }
+    next()
 }
 
 const userExtractor = (request, response, next) => {
     //routejen pitäisi päästä käyttäjään kutsulla
     //const user = request.user
+    if (request.token) {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        request.user = User.findById(decodedToken.id)
+    }
     next()
 }
 
