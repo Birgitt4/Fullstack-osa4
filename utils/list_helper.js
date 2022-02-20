@@ -18,7 +18,18 @@ const favoriteBlog = (blogs) => {
         author: favorit.author,
         likes: favorit.likes
     }
+    /*
+    if ( blogs.length === 0) {
+        return undefined
+    }
+
+    return blogs.sort((a, b) => b.likes - a.likes )[0]
+    */
 }
+
+/*
+
+*/
 
 module.exports = {
     dummy, totalLikes, favoriteBlog
